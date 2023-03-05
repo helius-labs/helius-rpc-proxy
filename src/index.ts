@@ -4,12 +4,16 @@ interface Env {
 
 export default {
 	async fetch(request: Request, env: Env) {
+		const payload = await request.json();
 		const proxyRequest = new Request(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, {
-			method: request.method,
-			headers: request.headers,
-			body: request.body,
+			method: "POST",
+			body: JSON.stringify(payload),
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Helius-Cloudflare-Proxy': 'true',
+			}
 		});
 
-		return fetch(proxyRequest);
+		return await fetch(proxyRequest);
 	},
 };
