@@ -2,6 +2,12 @@ interface Env {
 	HELIUS_API_KEY: string;
 }
 
+const corsHeaders = {
+	"Access-Control-Allow-Origin": "*",
+	"Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, OPTIONS",
+	"Access-Control-Allow-Headers": "Content-Type",
+}
+
 export default {
 	async fetch(request: Request, env: Env) {
 
@@ -14,22 +20,19 @@ export default {
 		if (request.method === "OPTIONS") {
 			return new Response(null, {
 				status: 200,
-				headers: {
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, OPTIONS",
-					"Access-Control-Allow-Headers": "Content-Type",
-				},
+				headers: corsHeaders,
 			});
 		}
 		
 
-		const payload = await request.json();
+		const payload = await request.text();
 		const proxyRequest = new Request(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, {
 			method: "POST",
-			body: JSON.stringify(payload),
+			body: payload,
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Helius-Cloudflare-Proxy': 'true',
+				...corsHeaders,
 			}
 		});
 
