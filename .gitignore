@@ -5,3 +5,5 @@
 *.log
 
 /dist
+
+test.js

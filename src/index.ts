@@ -23,6 +23,11 @@ export default {
 				headers: corsHeaders,
 			});
 		}
+
+		const upgradeHeader = request.headers.get('Upgrade')
+    if (upgradeHeader || upgradeHeader === 'websocket') {
+      return await fetch(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request)
+    }
 		
 
 		const payload = await request.text();
