@@ -1,12 +1,13 @@
 # Helius RPC Proxy
 
-> NOTE: You must have an existing Helius account and API key for this to work! Get one for free at https://helius.xyz.
+[![RPC Proxy](docs/rpc_proxy.png)](https://helius.xyz)
 
 This repo hosts a one-click-deploy Cloudflare worker that proxies RPC requests to Helius. The proxy will allow you to keep your API key
-hidden from public requests made by clients. 
+hidden from public requests made by clients. You will need both a [Helius](https://helius.xyz) account and a [Cloudflare](https://cloudflare.com) account to deploy this. Helius offers 100k credits for free each month, and Cloudflare workers can execute 100k invocations each day for free. Most projects can easily get started within these free tiers.
+
+Both standard JSON RPC and Websockets are supported!
 
 [Video Walkthrough](https://www.loom.com/share/a7add579f1c349d2a4bcab96ee04c47e)
-
 
 # Setup
 ### Step 1
@@ -42,5 +43,5 @@ lock down your RPC proxy further, consider the following steps after you have su
 
 
 * Update the `Access-Control-Allow-Origin` header in `src/index.ts` to contain the host that your requests are coming from (usually your client application).
-* Cloudflare Web Application Firewall (WAF) - You can configure the WAF to inspect requests and allow/deny based on your own business logic.
+* [Cloudflare Web Application Firewall (WAF)](https://www.cloudflare.com/lp/ppc/waf-x/) - You can configure the WAF to inspect requests and allow/deny based on your own business logic.
 * Modify the IP address allow list in Helius for your API key to only accept connections from the Cloudflare ranges (https://cloudflare.com/ips-v4).
