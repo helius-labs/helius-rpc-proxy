@@ -1,4 +1,5 @@
 interface Env {
+	CORS_ALLOW_ORIGIN: string;
 	HELIUS_API_KEY: string;
 }
 
