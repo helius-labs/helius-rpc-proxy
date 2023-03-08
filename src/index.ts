@@ -30,11 +30,11 @@ export default {
       return await fetch(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request)
     }
 
-
+		const {pathname} = new URL(request.url)
 		const payload = await request.text();
-		const proxyRequest = new Request(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, {
-			method: "POST",
-			body: payload,
+		const proxyRequest = new Request(`https://${pathname === '/' ? 'rpc' : 'api'}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, {
+			method: request.method,
+			body: payload || null,
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Helius-Cloudflare-Proxy': 'true',
