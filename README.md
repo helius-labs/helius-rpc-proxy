@@ -38,10 +38,10 @@ Refresh the page and confirm that your key is now saved and encrypted:
 
 You can now use your worker URL as an the RPC endpoint in all SDK and client side configurations without your API key leaking!
 # Additional Security Steps
-This implementaiton is intentionally left in a less-than-ideal security state to facilitate easy deployment by anyone. If you would like to 
+This implementation is intentionally left in a less-than-ideal security state to facilitate easy deployment by anyone. If you would like to
 lock down your RPC proxy further, consider the following steps after you have successfully deployed the worker:
 
 
-* Update the `Access-Control-Allow-Origin` header in `src/index.ts` to contain the host that your requests are coming from (usually your client application).
+* Update the `Access-Control-Allow-Origin` header by adding a new variable with the key name `CORS_ALLOW_ORIGIN` to contain the host that your requests are coming from (usually your client application). For example, if you wanted to allow requests from `https://example.com`, you would change the header to `https://example.com`.
 * [Cloudflare Web Application Firewall (WAF)](https://www.cloudflare.com/lp/ppc/waf-x/) - You can configure the WAF to inspect requests and allow/deny based on your own business logic.
 * Modify the IP address allow list in Helius for your API key to only accept connections from the Cloudflare ranges (https://cloudflare.com/ips-v4).
