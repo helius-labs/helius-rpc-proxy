@@ -3,6 +3,12 @@ on:
   push:
   pull_request:
   repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose an environment to deploy to: <dev|staging|prod>'
+        required: true
+        default: 'dev'
 jobs:
   deploy:
     runs-on: ubuntu-latest
