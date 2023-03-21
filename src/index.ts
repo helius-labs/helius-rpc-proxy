@@ -1,6 +1,8 @@
 interface Env {
 	CORS_ALLOW_ORIGIN: string;
 	HELIUS_API_KEY: string;
+	SESSION_KEY: string;
+	ORIGIN: string;
 }
 
 export default {
@@ -18,6 +20,13 @@ export default {
 			"Access-Control-Allow-Headers": "*",
 		}
 
+		const sessionKeyHeader = request.headers.get('Session-Key');
+		if (sessionKeyHeader != env.SESSION_KEY) {
+			return new Response(null, {
+				status: 404,
+			});
+		}
+
 		if (request.method === "OPTIONS") {
 			return new Response(null, {
 				status: 200,
@@ -25,9 +34,9 @@ export default {
 			});
 		}
 
-		const upgradeHeader = request.headers.get('Upgrade')
+		const upgradeHeader = request.headers.get('Upgrade');
     if (upgradeHeader || upgradeHeader === 'websocket') {
-      return await fetch(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request)
+      return await fetch(`https://rpc.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request);
     }
 
 		const {pathname, search} = new URL(request.url)
