@@ -19,10 +19,12 @@ export default {
 			"Access-Control-Allow-Headers": "*",
 		}
 
-		const sessionKeyHeader = request.headers.get('Session-Key');
-		if (sessionKeyHeader != env.SESSION_KEY) {
+		const { searchParams } = new URL(request.url)
+		const sessionKey = searchParams.get('session-key')
+		if (sessionKey != env.SESSION_KEY) {
 			return new Response(null, {
 				status: 404,
+				statusText: "Unexpected path"
 			});
 		}
 
