@@ -23,7 +23,7 @@ export default {
 		const headers = request.headers;
     const host = headers.get("Host");
 		if (host == "solana-rpc.web.helium.io") {
-			rpcNetwork = "rpc";
+			rpcNetwork = "rpc-devnet";
 		}
 		if (host == 'solana-rpc.web.test-helium.com') {
 			rpcNetwork = "rpc-devnet";
