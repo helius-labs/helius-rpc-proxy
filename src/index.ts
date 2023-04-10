@@ -14,13 +14,23 @@ export default {
 		// For example, if you wanted to allow requests from `https://example.com`, you would change the
 		// header to `https://example.com`.
 		const corsHeaders = {
-			"Access-Control-Allow-Origin": `${env.CORS_ALLOW_ORIGIN || '*'}`,
+			"Access-Control-Allow-Origin": `${env.CORS_ALLOW_ORIGIN || "*"}`,
 			"Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, OPTIONS",
 			"Access-Control-Allow-Headers": "*",
 		}
 
-		const { searchParams } = new URL(request.url)
-		const sessionKey = searchParams.get('session-key')
+		let rpcNetwork;
+		const headers = request.headers;
+    const host = headers.get("Host");
+		if (host == "solana-rpc.web.helium.io") {
+			rpcNetwork = "rpc";
+		}
+		if (host == 'solana-rpc.web.test-helium.com') {
+			rpcNetwork = "rpc-devnet";
+		}
+
+		const { searchParams, pathname, search } = new URL(request.url);
+		const sessionKey = searchParams.get("session-key");
 		if (sessionKey != env.SESSION_KEY) {
 			return new Response(null, {
 				status: 404,
@@ -35,19 +45,18 @@ export default {
 			});
 		}
 
-		const upgradeHeader = request.headers.get('Upgrade');
-    if (upgradeHeader || upgradeHeader === 'websocket') {
-      return await fetch(`https://rpc-devnet.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request);
+		const upgradeHeader = request.headers.get("Upgrade");
+    if (upgradeHeader || upgradeHeader === "websocket") {
+      return await fetch(`https://${rpcNetwork}.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request);
     }
 
-		const {pathname, search} = new URL(request.url)
 		const payload = await request.text();
-		const proxyRequest = new Request(`https://${pathname === '/' ? 'rpc-devnet' : 'api'}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ''}`, {
+		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, {
 			method: request.method,
 			body: payload || null,
 			headers: {
-				'Content-Type': 'application/json',
-				'X-Helius-Cloudflare-Proxy': 'true',
+				"Content-Type": "application/json",
+				"X-Helius-Cloudflare-Proxy": "true",
 				...corsHeaders,
 			}
 		});
