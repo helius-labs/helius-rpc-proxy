@@ -4,6 +4,20 @@ interface Env {
 	SESSION_KEY: string;
 }
 
+async function gatherResponse(response: Response) {
+	const { headers } = response;
+	const contentType = headers.get("content-type") || "";
+	if (contentType.includes("application/json")) {
+		return JSON.stringify(await response.json());
+	} else if (contentType.includes("application/text")) {
+		return response.text();
+	} else if (contentType.includes("text/html")) {
+		return response.text();
+	} else {
+		return response.text();
+	}
+}
+
 export default {
 	async fetch(request: Request, env: Env) {
 		console.log(request);	
@@ -66,7 +80,7 @@ export default {
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
-		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, new Request(request, {
+		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, {
 			method: request.method,
 			body: formattedPayload || null,
 			redirect: "follow",
@@ -76,8 +90,11 @@ export default {
 				"X-Helius-Cloudflare-Proxy": "true",
 				...corsHeaders,
 			}
-		}));
+		});
 
-		return await fetch(proxyRequest);
+		const response = await fetch(proxyRequest);
+    const results = await gatherResponse(response);
+
+    return new Response(results);
 	},
 };
