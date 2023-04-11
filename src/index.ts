@@ -58,7 +58,8 @@ export default {
 		try {
 			const json = JSON.parse(payload);
 			console.log(json);
-			console.log(await request.json());
+			const json2 = await request.json();
+			console.log(json2);
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
