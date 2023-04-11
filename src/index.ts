@@ -54,8 +54,6 @@ export default {
       return await fetch(`https://${rpcNetwork}.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request);
     }
 
-		console.log(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${searchParams.toString() ? `&${searchParams.toString()}` : ""}`);
-
 		const payload = await request.text();
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${searchParams.toString() ? `&${searchParams.toString()}` : ""}`, {
 			method: request.method,
