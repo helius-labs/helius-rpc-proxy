@@ -6,7 +6,8 @@ interface Env {
 
 export default {
 	async fetch(request: Request, env: Env) {
-
+		console.log(request);	
+	
 		// If the request is an OPTIONS request, return a 200 response with permissive CORS headers
 		// This is required for the Helius RPC Proxy to work from the browser and arbitrary origins
 		// If you wish to restrict the origins that can access your Helius RPC Proxy, you can do so by
@@ -30,6 +31,9 @@ export default {
 		}
 
 		const { searchParams, pathname, search } = new URL(request.url);
+		console.log(searchParams);
+		console.log(pathname);
+		console.log(search);
 		const sessionKey = searchParams.get("session-key");
 		if (sessionKey != env.SESSION_KEY) {
 			return new Response(null, {
@@ -51,6 +55,7 @@ export default {
     }
 
 		const payload = await request.text();
+		console.log(payload);
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, {
 			method: request.method,
 			body: payload || null,
