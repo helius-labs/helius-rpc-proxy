@@ -64,15 +64,16 @@ export default {
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
-		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, {
+		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, new Request(request, {
 			method: request.method,
 			body: formattedPayload || null,
+			redirect: "follow",
 			headers: {
 				"Content-Type": "application/json",
 				"X-Helius-Cloudflare-Proxy": "true",
 				...corsHeaders,
 			}
-		});
+		}));
 
 		return await fetch(proxyRequest);
 	},
