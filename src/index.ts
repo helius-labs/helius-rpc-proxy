@@ -56,9 +56,18 @@ export default {
 
 		const payload = await request.text();
 		console.log(payload);
+		let json = payload;
+		console.log(jsonjson);
+		try {
+			json = JSON.parse(payload);
+			console.log(json);
+			console.log(request.json());
+		} catch (error) {
+			// just means that the payload wasn't stringified json
+		}
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, {
 			method: request.method,
-			body: payload || null,
+			body: json || null,
 			headers: {
 				"Content-Type": "application/json",
 				"X-Helius-Cloudflare-Proxy": "true",
