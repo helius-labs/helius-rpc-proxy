@@ -85,7 +85,7 @@ export default {
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
-		console.log(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`);
+		console.log(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`);
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, {
 			method: request.method,
 			body: formattedPayload || null,
