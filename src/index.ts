@@ -4,26 +4,9 @@ interface Env {
 	SESSION_KEY: string;
 }
 
-async function gatherResponse(response: Response) {
-	const { headers } = response;
-	const contentType = headers.get("content-type") || "";
-	console.log(response.text());
-	console.log(await response.json())
-	if (contentType.includes("application/json")) {
-		return JSON.stringify(await response.json());
-	} else if (contentType.includes("application/text")) {
-		return response.text();
-	} else if (contentType.includes("text/html")) {
-		return response.text();
-	} else {
-		return response.text();
-	}
-}
-
 export default {
 	async fetch(request: Request, env: Env) {
-		console.log(request);	
-	
+
 		// If the request is an OPTIONS request, return a 200 response with permissive CORS headers
 		// This is required for the Helius RPC Proxy to work from the browser and arbitrary origins
 		// If you wish to restrict the origins that can access your Helius RPC Proxy, you can do so by
@@ -50,9 +33,6 @@ export default {
 		}
 
 		const { searchParams, pathname, search } = new URL(request.url);
-		console.log(searchParams);
-		console.log(pathname);
-		console.log(search);
 		const sessionKey = searchParams.get("session-key");
 		if (sessionKey != env.SESSION_KEY) {
 			return new Response(null, {
@@ -61,7 +41,6 @@ export default {
 			});
 		}
 		searchParams.delete("session-key");
-		console.log(searchParams);
 
 		if (request.method === "OPTIONS") {
 			return new Response(null, {
@@ -76,21 +55,9 @@ export default {
     }
 
 		const payload = await request.text();
-		console.log(payload);
-		let formattedPayload;
-		try {
-			const parsedJson = JSON.parse(payload);
-			formattedPayload = JSON.stringify(parsedJson);
-			console.log(formattedPayload);
-		} catch (error) {
-			// just means that the payload wasn't stringified json
-		}
-		console.log(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`);
-		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, {
+		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${searchParams.toString() ? `&${searchParams.toString()}` : ""}`, {
 			method: request.method,
-			body: formattedPayload || null,
-			redirect: "follow",
-			cf: { apps: false },
+			body: payload || null,
 			headers: {
 				"Content-Type": "application/json",
 				"X-Helius-Cloudflare-Proxy": "true",
@@ -98,9 +65,6 @@ export default {
 			}
 		});
 
-		const response = await fetch(proxyRequest);
-    const results = await gatherResponse(response);
-
-    return new Response(results);
+		return await fetch(proxyRequest);
 	},
 };
