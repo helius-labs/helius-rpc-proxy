@@ -37,13 +37,16 @@ export default {
 		}
 
 		let rpcNetwork;
+		let apiNetwork;
 		const headers = request.headers;
     const host = headers.get("Host");
 		if (host == "solana-rpc.web.helium.io") {
 			rpcNetwork = "rpc-devnet";
+			apiNetwork = "api-devnet";
 		}
 		if (host == 'solana-rpc.web.test-helium.com') {
 			rpcNetwork = "rpc-devnet";
+			apiNetwork = "api-devnet";
 		}
 
 		const { searchParams, pathname, search } = new URL(request.url);
@@ -82,6 +85,7 @@ export default {
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
+		console.log(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`);
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, {
 			method: request.method,
 			body: formattedPayload || null,
