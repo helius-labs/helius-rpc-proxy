@@ -41,6 +41,8 @@ export default {
 				statusText: "Unexpected path"
 			});
 		}
+		searchParams.delete("session-key");
+		console.log(searchParams);
 
 		if (request.method === "OPTIONS") {
 			return new Response(null, {
@@ -64,10 +66,11 @@ export default {
 		} catch (error) {
 			// just means that the payload wasn't stringified json
 		}
-		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ""}`, new Request(request, {
+		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : "api"}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}`, new Request(request, {
 			method: request.method,
 			body: formattedPayload || null,
 			redirect: "follow",
+			cf: { apps: false },
 			headers: {
 				"Content-Type": "application/json",
 				"X-Helius-Cloudflare-Proxy": "true",
