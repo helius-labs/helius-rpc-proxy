@@ -7,6 +7,8 @@ interface Env {
 async function gatherResponse(response: Response) {
 	const { headers } = response;
 	const contentType = headers.get("content-type") || "";
+	console.log(response.text());
+	console.log(await response.json())
 	if (contentType.includes("application/json")) {
 		return JSON.stringify(await response.json());
 	} else if (contentType.includes("application/text")) {
