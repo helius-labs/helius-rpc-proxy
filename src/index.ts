@@ -32,7 +32,7 @@ export default {
 			apiNetwork = "api-devnet";
 		}
 
-		const { searchParams, pathname, search } = new URL(request.url);
+		const { searchParams, pathname } = new URL(request.url);
 		const sessionKey = searchParams.get("session-key");
 		if (sessionKey != env.SESSION_KEY) {
 			return new Response(null, {
@@ -53,6 +53,8 @@ export default {
     if (upgradeHeader || upgradeHeader === "websocket") {
       return await fetch(`https://${rpcNetwork}.helius.xyz/?api-key=${env.HELIUS_API_KEY}`, request);
     }
+
+		console.log(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${searchParams.toString() ? `&${searchParams.toString()}` : ""}`);
 
 		const payload = await request.text();
 		const proxyRequest = new Request(`https://${pathname === "/" ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${env.HELIUS_API_KEY}${searchParams.toString() ? `&${searchParams.toString()}` : ""}`, {
