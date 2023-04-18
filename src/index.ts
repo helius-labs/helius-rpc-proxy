@@ -19,19 +19,21 @@ export default {
 			"Access-Control-Allow-Headers": "*",
 		}
 
-		let rpcNetwork;
-		let apiNetwork;
+		// Helius Solana mainnet subdomains (e.g., rpc.helius.xyz, api.helius.xyz) are the default for all 
+		// incoming requests to the CF worker, but if the request originates from solana-rpc.web.test-helium.com,
+		// use the Helius Solana devnet subdomains (e.g., rpc-devnet.helius.xyz, api-devnet.helius.xyz)
+		let rpcNetwork = "rpc";
+		let apiNetwork = "api";
 		const headers = request.headers;
     const host = headers.get("Host");
-		if (host == "solana-rpc.web.helium.io") {
-			rpcNetwork = "rpc-devnet";
-			apiNetwork = "api-devnet";
-		}
 		if (host == 'solana-rpc.web.test-helium.com') {
 			rpcNetwork = "rpc-devnet";
 			apiNetwork = "api-devnet";
 		}
 
+		// If the query string session-key value doesn't match the SESSION_KEY env variable, return 404
+		// otherwise continue on, but delete the session-key query string param from the list of all
+		// other query string params
 		const { searchParams, pathname } = new URL(request.url);
 		const sessionKey = searchParams.get("session-key");
 		if (sessionKey != env.SESSION_KEY) {
