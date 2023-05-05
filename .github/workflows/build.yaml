@@ -1,24 +1,74 @@
 name: Build
+
 on:
   push:
     branches:
       - main
-  repository_dispatch:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Choose an environment to deploy to: <dev|staging|prod>'
-        required: true
-        default: 'dev'
+
 jobs:
-  deploy:
+  tests:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+      steps:
+        - uses: actions/checkout@v2
+        - name: Install modules
+          run: npm install
+        - name: Run tests
+          run: npm test
+  stagging:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
+    env:
+      environment: stagging
+    runs-on: ubuntu-latest
+    needs: tests
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Environment
+        run: |
+          echo "Environment: $ENVIRONMENT"
+        env:
+          NAME: ${{ env.name }}
+          ENVIRONMENT: ${{ env.environment }}
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish --env ${{ env.environment }}
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  production:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref_name == 'main' }}
+    env:
+      environment: production
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    needs: tests
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Environment
+        run: |
+          echo "Environment: $ENVIRONMENT"
+        env:
+          NAME: ${{ env.name }}
+          ENVIRONMENT: ${{ env.environment }}
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          command: publish --env ${{ env.environment }}
         env:
           CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
