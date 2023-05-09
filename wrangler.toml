@@ -6,10 +6,10 @@ compatibility_date = "2022-05-03"
 workers_dev = true
 [env.stagging.vars]
 AWS_REGION = "us-west-2"
-AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Stagging"
+AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Stagging/Errors"
 
 [env.production]
 name = "rpc-proxy"
 [env.production.vars]
 AWS_REGION = "us-west-2"
-AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Production"
+AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Production/Errors"
