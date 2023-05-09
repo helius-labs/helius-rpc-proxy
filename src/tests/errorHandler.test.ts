@@ -4,8 +4,8 @@ import {
 	CloudWatchLogsClient,
 	PutLogEventsCommand,
 	CreateLogStreamCommand,
-  CreateLogStreamCommandInput,
-  PutLogEventsCommandInput,
+	CreateLogStreamCommandInput,
+	PutLogEventsCommandInput,
 } from '@aws-sdk/client-cloudwatch-logs';
 import { errorHandler } from '../utils/errorHandler';
 import { createLogStreamCommandBuilder } from '../utils/createLogStreamCommandBuilder';
@@ -42,8 +42,12 @@ describe('errorHandler', () => {
 	});
 
 	test('handles error properly', async () => {
-		(createLogStreamCommandBuilder as jest.Mock).mockImplementation(() => new CreateLogStreamCommand({} as CreateLogStreamCommandInput));
-		(putLogEventsCommandBuilder as jest.Mock).mockImplementation(() => new PutLogEventsCommand({} as PutLogEventsCommandInput));
+		(createLogStreamCommandBuilder as jest.Mock).mockImplementation(
+			() => new CreateLogStreamCommand({} as CreateLogStreamCommandInput)
+		);
+		(putLogEventsCommandBuilder as jest.Mock).mockImplementation(
+			() => new PutLogEventsCommand({} as PutLogEventsCommandInput)
+		);
 
 		cwMock.on(CreateLogStreamCommand).resolves({});
 		cwMock.on(PutLogEventsCommand).resolves({});
@@ -74,7 +78,7 @@ describe('errorHandler', () => {
 			statusMessage: args.res.statusText,
 			responseBody: 'text',
 		});
-    expect(cwMock).toHaveReceivedCommand(CreateLogStreamCommand);
-    expect(cwMock).toHaveReceivedCommand(PutLogEventsCommand);
+		expect(cwMock).toHaveReceivedCommand(CreateLogStreamCommand);
+		expect(cwMock).toHaveReceivedCommand(PutLogEventsCommand);
 	});
 });
