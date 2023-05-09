@@ -2,11 +2,11 @@ name = "rpc-proxy"
 main = "./src/index.ts"
 compatibility_date = "2022-05-03"
 
-[env.stagging]
+[env.staging]
 workers_dev = true
-[env.stagging.vars]
+[env.staging.vars]
 AWS_REGION = "us-west-2"
-AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Stagging/Errors"
+AWS_CLOUDWATCH_LOG_GROUP = "/CloudFlare/RPCProxy/Staging/Errors"
 
 [env.production]
 name = "rpc-proxy"
