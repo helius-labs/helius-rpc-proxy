@@ -59,7 +59,6 @@ describe('index', () => {
 		const resp = await worker.fetch(request, originalEnv);
 
 		expect(resp.status).toEqual(400);
-		console.log(resp)
 
 		expect(errorHandler).not.toBeCalled();
 		expect(fetch).not.toBeCalled();
