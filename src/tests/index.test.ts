@@ -27,10 +27,11 @@ describe('index', () => {
 		const request = new Request(
 			`https://solana-rpc.web.helium.io/?session-key=${originalEnv.SESSION_KEY}`,
 			{
-				method: 'GET',
+				method: 'POST',
 				headers: {
 					Host: 'solana-rpc.web.helium.io',
 				},
+				body: JSON.stringify({ jsonrpc: 2.0, id: "op-1", method: "getRecentBlockhash" }),
 			}
 		) as unknown as Parameters<typeof worker.fetch>[0];
 
@@ -48,10 +49,11 @@ describe('index', () => {
 		const request = new Request(
 			`https://solana-rpc.web.helium.io/?session-key=${originalEnv.SESSION_KEY}`,
 			{
-				method: 'GET',
+				method: 'POST',
 				headers: {
 					Host: 'solana-rpc.web.helium.io',
 				},
+				body: JSON.stringify({ jsonrpc: 2.0, id: "op-1", method: "getRecentBlockhash" }),
 			}
 		) as unknown as Parameters<typeof worker.fetch>[0];
 
