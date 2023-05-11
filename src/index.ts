@@ -69,6 +69,16 @@ export default {
 		}
 
 		const payload = await request.text();
+
+		try {
+			JSON.parse(payload);
+		} catch(e) {
+			return new Response(null, {
+				status: 400,
+				statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32700, message: "failed to parse RPC request body"}}),
+			});
+		}
+
 		const proxyRequest = new Request(
 			`https://${pathname === '/' ? rpcNetwork : apiNetwork}.helius.xyz${pathname}?api-key=${
 				env.HELIUS_API_KEY
