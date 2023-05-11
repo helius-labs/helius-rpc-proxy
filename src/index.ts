@@ -71,7 +71,14 @@ export default {
 		const payload = await request.text();
 
 		try {
-			JSON.parse(payload);
+			const data = JSON.parse(payload);
+
+			if (data.length == 0) {
+				return new Response(null, {
+					status: 400,
+					statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32600, message: "empty rpc batch"}}),
+				});
+			}
 		} catch(e) {
 			return new Response(null, {
 				status: 400,
