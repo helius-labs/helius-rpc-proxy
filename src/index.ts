@@ -64,7 +64,11 @@ export default {
 		const payload = await request.text();
 
 		try {
+			console.log(payload);
+
 			const data = JSON.parse(payload);
+
+			console.log(data);
 
 			if (data.length === 0) {
 				return new Response(null, {
@@ -73,10 +77,11 @@ export default {
 				});
 			}
 		} catch(e) {
-			return new Response(null, {
-				status: 400,
-				statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32700, message: "failed to parse RPC request body"}}),
-			});
+			console.log(e);
+			// return new Response(null, {
+			// 	status: 400,
+			// 	statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32700, message: "failed to parse RPC request body"}}),
+			// });
 		}
 
 		const proxyRequest = new Request(
