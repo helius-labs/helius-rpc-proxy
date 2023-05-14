@@ -63,25 +63,22 @@ export default {
 
 		const payload = await request.text();
 
-		try {
-			console.log(payload);
-
-			const data = JSON.parse(payload);
-
-			console.log(data);
-
-			if (data.length === 0) {
+		if (request.method === 'POST') {
+			try {	
+				const data = JSON.parse(payload);
+		
+				if (data.length === 0) {
+					return new Response(null, {
+						status: 400,
+						statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32600, message: "empty rpc batch"}}),
+					});
+				}
+			} catch(e) {
 				return new Response(null, {
 					status: 400,
-					statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32600, message: "empty rpc batch"}}),
+					statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32700, message: "failed to parse RPC request body"}}),
 				});
 			}
-		} catch(e) {
-			console.log(e);
-			// return new Response(null, {
-			// 	status: 400,
-			// 	statusText: JSON.stringify({ jsonrpc: 2.0, id: null, error: { code: -32700, message: "failed to parse RPC request body"}}),
-			// });
 		}
 
 		const proxyRequest = new Request(
