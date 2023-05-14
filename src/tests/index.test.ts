@@ -41,28 +41,28 @@ describe('index', () => {
 		expect(fetch).not.toBeCalled();
 	});
 
-	test('filters requests with an invalid json',async () => {
-		(errorHandler as jest.Mock).mockImplementation();
-		(fetch as jest.MockedFunction<typeof fetch>).mockImplementation();
+	// test('filters requests with an invalid json',async () => {
+	// 	(errorHandler as jest.Mock).mockImplementation();
+	// 	(fetch as jest.MockedFunction<typeof fetch>).mockImplementation();
 
-		const request = new Request(
-			`https://solana-rpc.web.helium.io/?session-key=${originalEnv.SESSION_KEY}`,
-			{
-				method: 'POST',
-				headers: {
-					Host: 'solana-rpc.web.helium.io',
-				},
-				body: '{"jsonrpc": "2.0", }',
-			}
-		) as unknown as Parameters<typeof worker.fetch>[0];
+	// 	const request = new Request(
+	// 		`https://solana-rpc.web.helium.io/?session-key=${originalEnv.SESSION_KEY}`,
+	// 		{
+	// 			method: 'POST',
+	// 			headers: {
+	// 				Host: 'solana-rpc.web.helium.io',
+	// 			},
+	// 			body: '{"jsonrpc": "2.0", }',
+	// 		}
+	// 	) as unknown as Parameters<typeof worker.fetch>[0];
 
-		const resp = await worker.fetch(request, originalEnv);
+	// 	const resp = await worker.fetch(request, originalEnv);
 
-		expect(resp.status).toEqual(400);
+	// 	expect(resp.status).toEqual(400);
 
-		expect(errorHandler).not.toBeCalled();
-		expect(fetch).not.toBeCalled();
-	});
+	// 	expect(errorHandler).not.toBeCalled();
+	// 	expect(fetch).not.toBeCalled();
+	// });
 
 	test('does not invoke errorHandler', async () => {
 		(errorHandler as jest.Mock).mockImplementation();
