@@ -61,13 +61,6 @@ export default {
 			return res;
 		}
 
-		if (request.method !== "POST") {
-			return new Response(null, {
-				status: 400,
-				statusText: 'Only POST requests are allowed',
-			});
-		}
-
 		const payload = await request.text();
 
 		try {
