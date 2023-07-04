@@ -9,11 +9,19 @@ export default {
 		// changing the `*` in the `Access-Control-Allow-Origin` header to a specific origin.
 		// For example, if you wanted to allow requests from `https://example.com`, you would change the
 		// header to `https://example.com`.
-		const corsHeaders = {
-			'Access-Control-Allow-Origin': `${env.CORS_ALLOW_ORIGIN || '*'}`,
+		const corsHeaders: Record<string, string> = {
 			'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, OPTIONS',
 			'Access-Control-Allow-Headers': '*',
 		};
+
+		if (env.CORS_ALLOW_ORIGIN) {
+			const origin = request.headers.get('Origin')
+			if (origin && env.CORS_ALLOW_ORIGIN === origin) {
+				corsHeaders['Access-Control-Allow-Origin'] = origin
+			}
+		} else {
+			corsHeaders['Access-Control-Allow-Origin'] = '*'
+		}
 
 		// Helius Solana mainnet subdomains (e.g., rpc.helius.xyz, api.helius.xyz) are the default for all
 		// incoming requests to the CF worker, but if the request originates from solana-rpc.web.test-helium.com,
