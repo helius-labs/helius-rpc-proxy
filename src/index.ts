@@ -35,9 +35,11 @@ export default {
 		}
 
 		const upgradeHeader = request.headers.get('Upgrade')
+
 		if (upgradeHeader || upgradeHeader === 'websocket') {
 			return await fetch(`https://mainnet.helius-rpc.com/?api-key=${env.HELIUS_API_KEY}`, request)
 		}
+
 
 		const { pathname, search } = new URL(request.url)
 		const payload = await request.text();
@@ -47,10 +49,14 @@ export default {
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Helius-Cloudflare-Proxy': 'true',
-				...corsHeaders,
 			}
 		});
 
-		return await fetch(proxyRequest);
+		return await fetch(proxyRequest).then(res => {
+			return new Response(res.body, {
+				status: res.status,
+				headers: corsHeaders
+			});
+		});
 	},
 };
