@@ -38,8 +38,9 @@ export default {
     const upgradeHeader = request.headers.get("Upgrade");
     const endpoint_prefix =
       env.IS_DEVNET === "1"
-        ? "https://devnet.helius-rpc.com/"
-        : "https://mainnet.helius-rpc.com/";
+        ? "devnet.helius-rpc.com"
+        : "mainnet.helius-rpc.com";
+
     console.log(endpoint_prefix);
     if (upgradeHeader || upgradeHeader === "websocket") {
       return await fetch(
@@ -48,17 +49,15 @@ export default {
       );
     }
 
-    const { pathname, search } = new URL(request.url);
-    const payload = await request.text();
+    const { pathname, searchParams } = new URL(request.url);
+    const apiUrl = pathname === "/" ? endpoint_prefix : "api.helius.xyz";
+    const search =
+      Array.from(searchParams).length > 0 ? `?${searchParams}` : "";
     const proxyRequest = new Request(
-      `https://${
-        pathname === "/" ? `${endpoint_prefix}` : "api.helius.xyz"
-      }${pathname}?api-key=${env.HELIUS_API_KEY}${
-        search ? `&${search.slice(1)}` : ""
-      }`,
+      `https://${apiUrl}${pathname}?api-key=${env.HELIUS_API_KEY}${search}`,
       {
         method: request.method,
-        body: payload || null,
+        body: request.method !== "GET" ? await request.text() : undefined,
         headers: {
           "Content-Type": "application/json",
           "X-Helius-Cloudflare-Proxy": "true",
