@@ -41,7 +41,8 @@ You can now use your worker URL as an the RPC endpoint in all SDK and client sid
 This implementation is intentionally left in a less-than-ideal security state to facilitate easy deployment by anyone. If you would like to
 lock down your RPC proxy further, consider the following steps after you have successfully deployed the worker:
 
-
+## OPTIONAL
+To change your RPC endpoint to devnet, set `IS_DEVNET` = 1 in your Cloudflare variables. The default setting is mainnet.
 * Update the `Access-Control-Allow-Origin` header by adding a new variable with the key name `CORS_ALLOW_ORIGIN` to contain the host that your requests are coming from (usually your client application). For example, if you wanted to allow requests from `https://example.com`, you would change the header to `https://example.com`. To support multiple domains, set `CORS_ALLOW_ORIGIN` to a comma separated list of domains (e.g. `https://example.com,https://beta.example.com`).
 * [Cloudflare Web Application Firewall (WAF)](https://www.cloudflare.com/lp/ppc/waf-x/) - You can configure the WAF to inspect requests and allow/deny based on your own business logic.
 * Modify the IP address allow list in Helius for your API key to only accept connections from the Cloudflare ranges (https://cloudflare.com/ips-v4).
