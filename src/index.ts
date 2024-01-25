@@ -1,7 +1,7 @@
 interface Env {
 	CORS_ALLOW_ORIGIN: string;
 	HELIUS_API_KEY: string;
-	IS_DEVNET: number;
+	IS_DEVNET: string;
 }
 
 export default {
@@ -34,9 +34,9 @@ export default {
 				headers: corsHeaders,
 			});
 		}
-
+	console.log("ENV", env)
 		const upgradeHeader = request.headers.get('Upgrade')
-const endpoint_prefix = env.IS_DEVNET === 1 ? 'https://devnet.helius-rpc.com/' : 'https://mainnet.helius-rpc.com/';
+const endpoint_prefix = env.IS_DEVNET === "1" ? 'https://devnet.helius-rpc.com/' : 'https://mainnet.helius-rpc.com/';
 		console.log(endpoint_prefix)
 if (upgradeHeader || upgradeHeader === 'websocket') {
     return await fetch(`${endpoint_prefix}?api-key=${env.HELIUS_API_KEY}`, request);
