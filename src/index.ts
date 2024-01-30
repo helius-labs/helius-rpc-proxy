@@ -41,7 +41,6 @@ export default {
         ? "devnet.helius-rpc.com"
         : "mainnet.helius-rpc.com";
 
-    console.log(endpoint_prefix);
     if (upgradeHeader || upgradeHeader === "websocket") {
       return await fetch(
         `${endpoint_prefix}?api-key=${env.HELIUS_API_KEY}`,
