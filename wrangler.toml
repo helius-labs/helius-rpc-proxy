@@ -1,3 +1,14 @@
-name = "rpc-proxy" # todo
+name = "cf-debugging-worker" # todo
 main = "./src/index.ts"
 compatibility_date = "2022-05-03"
+account_id = "677751811ae9772122dc6f1d03848974"
+logpush = true
+usage_model = "unbound"
+node_compat = true
+
+routes = [
+  { pattern = "cf-debugging.helius-internal.com", custom_domain = true },
+]
+
+[placement]
+mode = "smart"
