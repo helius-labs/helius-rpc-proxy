@@ -1,6 +1,15 @@
 interface Env {
 	CORS_ALLOW_ORIGIN: string;
 	HELIUS_API_KEY: string;
+	DEVNET?: string;
+}
+
+function makeHeliusRpcUrlBase(isDevnet: boolean) {
+	return `${isDevnet ? 'devnet' : 'mainnet'}.helius-rpc.com`
+}
+
+function makeHeliusApiUrlBase(isDevnet: boolean) {
+	return `api${isDevnet ? '-devnet' : ''}.helius.xyz`
 }
 
 export default {
@@ -34,16 +43,20 @@ export default {
 			});
 		}
 
+		const isDevnet = env.DEVNET ? env.DEVNET.toLowerCase() === 'true' : false;
+		const heliusRpcUrlBase = makeHeliusRpcUrlBase(isDevnet);
+		const heliusApiUrlBase = makeHeliusApiUrlBase(isDevnet);
+
 		const upgradeHeader = request.headers.get('Upgrade')
 
 		if (upgradeHeader || upgradeHeader === 'websocket') {
-			return await fetch(`https://mainnet.helius-rpc.com/?api-key=${env.HELIUS_API_KEY}`, request)
+			return await fetch(`https://${heliusRpcUrlBase}/?api-key=${env.HELIUS_API_KEY}`, request)
 		}
 
 
 		const { pathname, search } = new URL(request.url)
 		const payload = await request.text();
-		const proxyRequest = new Request(`https://${pathname === '/' ? 'mainnet.helius-rpc.com' : 'api.helius.xyz'}${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ''}`, {
+		const proxyRequest = new Request(`https://${pathname === '/' ? heliusRpcUrlBase : heliusApiUrlBase}${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ''}`, {
 			method: request.method,
 			body: payload || null,
 			headers: {
