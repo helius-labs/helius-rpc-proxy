@@ -1,3 +1,26 @@
-name = "rpc-proxy" # todo
+name = "solana-rpc-proxy"
 main = "./src/index.ts"
 compatibility_date = "2022-05-03"
+
+
+
+[vars]
+HELIUS_API_KEY=""
+IS_MAINNET=true
+
+[env.staging.vars]
+IS_MAINNET=false
+
+[env.production.vars]
+IS_MAINNET=true
+
+
+[env.staging]
+routes = [
+	{ pattern = "devnet.solana-rpc.elixir.app", custom_domain = true }
+] 
+
+[env.production]
+routes = [
+	{ pattern = "mainnet.solana-rpc.elixir.app", custom_domain = true }
+]

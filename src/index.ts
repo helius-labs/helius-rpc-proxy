@@ -1,8 +1,11 @@
 interface Env {
 	CORS_ALLOW_ORIGIN: string;
 	HELIUS_API_KEY: string;
+	IS_MAINNET: boolean;
 }
 
+const MAINNET_RPC_URL = 'mainnet.helius-rpc.com';
+const DEVNET_RPC_URL = 'devnet.helius-rpc.com';
 export default {
 	async fetch(request: Request, env: Env) {
 
@@ -37,13 +40,15 @@ export default {
 		const upgradeHeader = request.headers.get('Upgrade')
 
 		if (upgradeHeader || upgradeHeader === 'websocket') {
-			return await fetch(`https://mainnet.helius-rpc.com/?api-key=${env.HELIUS_API_KEY}`, request)
+			const rpcUrl = env.IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
+			return await fetch(`https://${rpcUrl}/?api-key=${env.HELIUS_API_KEY}`, request)
 		}
 
 
 		const { pathname, search } = new URL(request.url)
 		const payload = await request.text();
-		const proxyRequest = new Request(`https://${pathname === '/' ? 'mainnet.helius-rpc.com' : 'api.helius.xyz'}${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ''}`, {
+		const rpcUrl = env.IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
+		const proxyRequest = new Request(`https://${pathname === '/' ? rpcUrl : 'api.helius.xyz'}${pathname}?api-key=${env.HELIUS_API_KEY}${search ? `&${search.slice(1)}` : ''}`, {
 			method: request.method,
 			body: payload || null,
 			headers: {
