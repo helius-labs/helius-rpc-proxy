@@ -1,11 +1,15 @@
 # Helius RPC Proxy
 
-This repo hosts a one-click-deploy Cloudflare worker that proxies RPC requests to Helius. The proxy will allow you to keep your API key
-hidden from public requests made by clients. You will need both a [Helius](https://helius.xyz) account and a [Cloudflare](https://cloudflare.com) account to deploy this. Helius offers 100k credits for free each month, and Cloudflare workers can execute 100k invocations each day for free. Most projects can easily get started within these free tiers.
+This repo hosts a Cloudflare worker that proxies RPC requests to Helius. The proxy will allow you to keep your API key
+hidden from public requests made by clients. You will need both a [Helius](https://helius.xyz) account and a [Cloudflare](https://cloudflare.com) account to deploy this.
 
 Both standard JSON RPC and Websockets are supported!
 
 [Video Walkthrough](https://www.loom.com/share/a7add579f1c349d2a4bcab96ee04c47e)
+
+# JWT Validation
+
+`JWT_SECRET` variable is needed for jwt validation of incoming requests.
 
 # Additional Security Steps
 
