@@ -4,9 +4,6 @@ const MAINNET_RPC_URL = 'mainnet.helius-rpc.com';
 const DEVNET_RPC_URL = 'devnet.helius-rpc.com';
 export default {
   async fetch(request: Request, env: Env) {
-    if (!(await isValidJWT(request, env))) {
-      return new Response('Valid JWT required', { status: 401 });
-    }
     // If the request is an OPTIONS request, return a 200 response with permissive CORS headers
     // This is required for the Helius RPC Proxy to work from the browser and arbitrary origins
     // If you wish to restrict the origins that can access your Helius RPC Proxy, you can do so by
@@ -35,6 +32,10 @@ export default {
         status: 200,
         headers: corsHeaders,
       });
+    }
+
+    if (!(await isValidJWT(request, env))) {
+      return new Response('Valid JWT required', { status: 401 });
     }
 
     const upgradeHeader = request.headers.get('Upgrade');
