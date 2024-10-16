@@ -4,10 +4,14 @@
   "scripts": {
     "dev": "wrangler dev src/index.ts --local",
     "deploy:staging": "wrangler deploy --minify src/index.ts --env staging",
-    "deploy:production": "wrangler deploy --minify src/index.ts --env production"
+    "deploy:production": "wrangler deploy --minify src/index.ts --env production",
+    "cf-typegen": "wrangler types"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240502.0",
-    "wrangler": "^3.47.0"
+    "@cloudflare/workers-types": "^4.20241011.0",
+    "wrangler": "^3.80.4"
+  },
+  "dependencies": {
+    "@tsndr/cloudflare-worker-jwt": "^3.1.2"
   }
 }

@@ -9,8 +9,8 @@
     "preserveConstEnums": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "types": ["@cloudflare/workers-types"]
+    "types": ["@cloudflare/workers-types/2023-07-01"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["worker-configuration.d.ts", "src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test"]
 }

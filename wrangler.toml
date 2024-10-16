@@ -1,18 +1,24 @@
 name = "solana-rpc-proxy"
 main = "./src/index.ts"
-compatibility_date = "2022-05-03"
+compatibility_date = "2024-10-04"
+compatibility_flags = ["nodejs_compat"]
 
-
+[observability]
+enabled = true
 
 [vars]
 HELIUS_API_KEY=""
 IS_MAINNET=true
+JWT_SECRET="secure-secret"
+CORS_ALLOW_ORIGIN=""
 
 [env.staging.vars]
 IS_MAINNET=false
+CORS_ALLOW_ORIGIN=""
 
 [env.production.vars]
 IS_MAINNET=true
+CORS_ALLOW_ORIGIN=""
 
 
 [env.staging]
