@@ -13,9 +13,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Publish
         uses: cloudflare/wrangler-action@3.0.1
         with:
