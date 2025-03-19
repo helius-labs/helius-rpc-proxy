@@ -13,8 +13,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
       - name: Publish
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@3.1.1
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
         env:
