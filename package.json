@@ -5,7 +5,7 @@
 		"node": ">=20.0.0"
 	},
 	"scripts": {
-		"deploy": "wrangler publish src/index.ts",
+		"deploy": "wrangler deploy src/index.ts",
 		"dev": "wrangler dev src/index.ts --local",
 		"test": "vitest",
 		"start-stackblitz": "WRANGLER_SEND_METRICS=false wrangler dev src/index.ts --local"
