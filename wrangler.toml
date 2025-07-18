@@ -1,4 +1,4 @@
-name = "solana-rpc-proxy"
+name = "helius-rpc-proxy"
 main = "./src/index.ts"
 compatibility_date = "2024-10-04"
 compatibility_flags = ["nodejs_compat"]
@@ -6,27 +6,33 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 
-[vars]
-HELIUS_API_KEY=""
-IS_MAINNET=true
-JWT_SECRET="secure-secret"
+[env.test.vars]
 CORS_ALLOW_ORIGIN=""
+LIVE_PROD_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsNHUkfSb/TyiNHn3Ul2W\nXjpL8XJUgzGY2u/cTenV8G+oobsM+H+cgzzj8QnQYxdyOLTj/yZIKK3s1yQksARV\nJRRaYVU3kOwlF8eRJKFSgRdUCrCzyNh4xNmx0XVa0wv8xJzCXkeGSXpO26TBcHMS\nFtKTjsNOBeSFaKiDKukCJCGxShWnq0qIQORUFyNKUvGboWiB8tvvs9pQCxnWT/vx\n1inXs654ewC08g2+KY1KKnGp4jpAgOPNMtxSeRfhrTgl2NSv6krpaoFvs86Fgv1k\nb51oYnBWy1A65swgB0OvJ6IzPNwqcC3t37Y2/oqjscgVXlQi/D+KG4uP1KVWEo1k\n3I0fdqXc9nAgd7BVdgmXPGRIJHab+QvZ8cIMGTHQLqXw3wO1w+YH9P2OQjtRMfNN\naId94cmKpj9mQEQZZklbyx1aERF+HVRlF1B9FWHyFgOOQlL7UZFUGJFSalYhqnJ6\nAz/idcln25zS8iRwrnwWgCDFA14YMQgK8puXe65vHjmLZBuBbDvmHUumm+H52tX6\ne13OWmvABUUIQzEq7ZI0dOAjVdCdEa/MLV/BJ+I3Etj55ENgAkItd1UicQIBBsxg\nPy3BB5ovzRDetl/i90wtT5qf8wB2QPDlVhDqoSer4qXoF//C75ezsuzxjdc0sgOB\nfuCmOg9fJZNK4FU1cTLXTAECAwEAAQ==\n-----END PUBLIC KEY-----"
+SANDBOX_PROD_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA1ftfO6rnnjjD6aIqhVQ3\n8zP3FwFAB4IXdDjoLoyfFmuuKXuowOTA7Ala9R8793vBYmnp66ojwJ7XktAKkMYU\n6t0jJu4BqTLlWl7EIOvROeXuBlYrzL//MLGd129MmojSRSRgB/fCyuqG2fkS9ZCl\nXW9Rs6v0hCaLzZHmK8gEs9u6BsLgA7+pWPwp6rTuBs3lOPIHmC+FMUukVbIi6Ejy\n65UZd9Tk6SJVdsLo2gmsSOkqpPtdD4Emc07NlmqX+QpvE2Lh2gbK8r4J/31YRg7e\nz35Bg5zj0j5VNbn8GCSmcJjrB2ioyA17LakFbijDb5Z3QK/muHP5MvyQQcoqXP06\npWrVkfgrZHycoBiVf0vePylTDGc9Go6AdkqAfj7JK+OCNIBWkemdkTCH/dlVjOCP\niPScrSmysczUSX7sLIMiYRZWiwbUstu6WstLwL8nAvk4YE0e0wpS5xOQFUIqV0cD\nCrA0NaWmu7TLywEU9Jf3R3Zoj7mjcasvxPvqscnSqyTzkno57fefcCzrYrnWkTTX\nXlWT6F9ljeWYSMJe7FTiXN4a+4odAl2dVEM2ZgYbvCYQqMqZPLY84yiM8vV8pqDM\niybt1wwzs+1n9KJTZTZwiHwOfBvbZf5qx8WhQUcG+xfh29vSgvXvoiybAAy/fCUR\nja7C0ImnYleL0sy8Yf8LpXsCAwEAAQ==\n-----END PUBLIC KEY-----"
+LIVE_INT_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAz35omNOo7l1uSi4ARSG+\n9qcjvEU+4j/rhwtDywnqUZXTtjoMqrZuQ8gIWTmF7EP43PjMC74Wnjo/cko2lq4t\n+5moRB9nfWDJKJ6Ts23xfnGQe7vF0+1moCEpwjzTFc3ogAedKF3O5csq+KXpBzLh\nPmN1NFxWS2HRARvwn/finJgQlDkBf9TGqD1FEuRcbz3B9BOAVehrAm8ERk4mBgPM\nbt5GyraC7s3iiJULZ7ul8nnOur/K3Bfnw7Xsp17ar1+HHmE+VFHd7kuQM6AI4LBZ\npoBbPaF3fbpBujtH4Yx8cv0T8/ZJaQqluoo+f01IN25IVokv2+GSZDgH+IZ8Z+OI\niZ6mZuKYwOJvJXCSX48fdDO7pyKuNdOLa1/7AqQA/W1n6KKboXnztCsoLcIw19XK\n29u+GrwX3OAH3G4F3Z7/LXpE7VopYfeBNYJtX/V1jXtlNAasrssGZQKof0djRlXj\nW7xZuqDhfw6FOZsFI/msNKUkEYLq3EDidP+8gFcOFrOErp88hVLLvR5lN+uoPUHf\nS+2MM9y9OOwpqxoB/o2N/l0I8pxT/brByWZg+/HBj2oQZHQ5I6vJ55/S0pj1cvXf\n/BrqRBv6OZzmwLHh6zoCSKcpYBoaMRkuQ+WjqoylsbRdozTOI07UqlreZd0Wa04l\nebBY4ghqdd49DZU68FAGbisCAwEAAQ==\n-----END PUBLIC KEY-----"
+SANDBOX_INT_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtSMT/jqW+hKYhPJ6mtHY\njo5H3X5+wtBTpEcJBfW4I+M8wz0Irky/lmXf5ohhvWwIybuszXyOykxi/xTrsKDT\n7gfGyCbN7BePczyTmpFvb85mU3KF9tJj4ff5abGn3uSI3cXRuaE7XIA0Ie5Rx86c\nF/WfxnFRAK8fz4BiCOhDAnDqe1wI0N1pD8/sHmODMVon4cOoLSgCedv4OjOAIHHk\n6OLn7Oe5DBopcAD/By7fzPRPYU98KAm4ZCWJNpUX2ZzNXd+stZs9VkJtxb4GmRpV\nfC5pQE4U5ri/oOKaCK5mGbVEZ9kfvYt79aOOx/XecAyDZBpMqeAATU7nEbnDgF4d\nbCcVPkeFK0eHqAQQlpaNzxEBP4iJICfbRTjG1v4FyMVE/uZfWIDQjcrfL5snaNmL\n33JS18zl3DVf6hpRoYwcWuQTORAnQJiE4yig/+323f/5Ki5w1k8SORE+yhdTt86F\ncdg7/IhvA1Es4BSDT9vrX1apEN4Z5X1VWYJQj/xRbRb1s9KEtQyXU9/Oo2Cu/Je0\nLP5EJZZLQXqiA6PubHR3NdkadisFhcquUC66yDft+4T3qKFe5p0soXMC689D3/+y\nEzhKgaNPQj7rkeGtz6iRo2idS8Z5bpmlVkRX1nlY2dm3TZmP1jRx4ocdbcJpmCQl\nu3KtnPLJ4/r2WWnsmUw9NnUCAwEAAQ==\n-----END PUBLIC KEY-----"
+LIVE_DEV_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAq3owOz0xZbV05fj3JIBQ\nFb6/woTQ0gnkgJjH42IAL+l1g/NmImGep+KCLjiVefYDjz91HyHm1zPRkV4r6PH5\nppl39nEgKwDeJFKSodp1OJ9Aw99GvTI93C7CTJbKiUkS1b/sL92gqG0qsjVtVT8/\nUTNIKZFTVsRFVis3X+afEnIudbHv2ahLhUX2aFrEIanLr3IflfUAmLqey5yJC3Hu\ndfnd3Ljk1O6GU3XyMfmf3JzpJcdght3Y6hogq+KQ2E74JwJwV0CPq7QSiMXMp632\n5GBVRhQiy2d9tcy7C/1hAK/xDQQ9Ilx8UnqxXYm5MmGGJfvknJoAbmYYeeX7s2Dl\nQdYucLPFP+2jh1mHtaRqJJLL45ttpUcqfqcjxChk/itx354pQmNdEBE8Q2+gtsWn\na7bZ4HUkSZzWrlYOB+3y88eK7feF8nP1BC1ca/jvx0W1L4Jw/UygkWz6xEa4wgiC\nyquNeJENJSvR0dVvcgQg5MMh5oxYbD73phEJXDdocsnXAgMBAAE=\n-----END PUBLIC KEY-----"
+SANDBOX_DEV_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAq3owOz0xZbV05fj3JIBQ\nFb6/woTQ0gnkgJjH42IAL+l1g/NmImGep+KCLjiVefYDjz91HyHm1zPRkV4r6PH5\nppl39nEgKwDeJFKSodp1OJ9Aw99GvTI93C7CTJbKiUkS1b/sL92gqG0qsjVtVT8/\nUTNIKZFTVsRFVis3X+afEnIudbHv2ahLhUX2aFrEIanLr3IflfUAmLqey5yJC3Hu\ndfnd3Ljk1O6GU3XyMfmf3JzpJcdght3Y6hogq+KQ2E74JwJwV0CPq7QSiMXMp632\n5GBVRhQiy2d9tcy7C/1hAK/xDQQ9Ilx8UnqxXYm5MmGGJfvknJoAbmYYeeX7s2Dl\nQdYucLPFP+2jh1mHtaRqJJLL45ttpUcqfqcjxChk/itx354pQmNdEBE8Q2+gtsWn\na7bZ4HUkSZzWrlYOB+3y88eK7feF8nP1BC1ca/jvx0W1L4Jw/UygkWz6xEa4wgiC\nyquNeJENJSvR0dVvcgQg5MMh5oxYbD73phEJXDdocsnXAgMBAAE=\n-----END PUBLIC KEY-----"
+IS_LIVE_PROD=false
 
-[env.staging.vars]
-IS_MAINNET=false
+[env.prod.vars]
 CORS_ALLOW_ORIGIN=""
+LIVE_PROD_JWT_PUBKEY="-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsNHUkfSb/TyiNHn3Ul2W\nXjpL8XJUgzGY2u/cTenV8G+oobsM+H+cgzzj8QnQYxdyOLTj/yZIKK3s1yQksARV\nJRRaYVU3kOwlF8eRJKFSgRdUCrCzyNh4xNmx0XVa0wv8xJzCXkeGSXpO26TBcHMS\nFtKTjsNOBeSFaKiDKukCJCGxShWnq0qIQORUFyNKUvGboWiB8tvvs9pQCxnWT/vx\n1inXs654ewC08g2+KY1KKnGp4jpAgOPNMtxSeRfhrTgl2NSv6krpaoFvs86Fgv1k\nb51oYnBWy1A65swgB0OvJ6IzPNwqcC3t37Y2/oqjscgVXlQi/D+KG4uP1KVWEo1k\n3I0fdqXc9nAgd7BVdgmXPGRIJHab+QvZ8cIMGTHQLqXw3wO1w+YH9P2OQjtRMfNN\naId94cmKpj9mQEQZZklbyx1aERF+HVRlF1B9FWHyFgOOQlL7UZFUGJFSalYhqnJ6\nAz/idcln25zS8iRwrnwWgCDFA14YMQgK8puXe65vHjmLZBuBbDvmHUumm+H52tX6\ne13OWmvABUUIQzEq7ZI0dOAjVdCdEa/MLV/BJ+I3Etj55ENgAkItd1UicQIBBsxg\nPy3BB5ovzRDetl/i90wtT5qf8wB2QPDlVhDqoSer4qXoF//C75ezsuzxjdc0sgOB\nfuCmOg9fJZNK4FU1cTLXTAECAwEAAQ==\n-----END PUBLIC KEY-----"
+SANDBOX_PROD_JWT_PUBKEY=""
+LIVE_INT_JWT_PUBKEY=""
+SANDBOX_INT_JWT_PUBKEY=""
+LIVE_DEV_JWT_PUBKEY=""
+SANDBOX_DEV_JWT_PUBKEY=""
+IS_LIVE_PROD=true
 
-[env.production.vars]
-IS_MAINNET=true
-CORS_ALLOW_ORIGIN=""
-
-
-[env.staging]
+[env.test]
 routes = [
-	{ pattern = "devnet.solana-rpc.elixir.app", custom_domain = true }
-] 
+	{ pattern = "test-solana.rpc.elixir.games", custom_domain = true }
+]
 
-[env.production]
+
+[env.prod]
 routes = [
-	{ pattern = "mainnet.solana-rpc.elixir.app", custom_domain = true }
+	{ pattern = "solana.rpc.elixir.games", custom_domain = true }
 ]

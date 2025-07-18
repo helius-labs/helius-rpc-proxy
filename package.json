@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "wrangler dev src/index.ts --local",
-    "deploy:staging": "wrangler deploy --minify src/index.ts --env staging",
-    "deploy:production": "wrangler deploy --minify src/index.ts --env production",
+    "deploy:test": "wrangler deploy --minify src/index.ts --env test",
+    "deploy:prod": "wrangler deploy --minify src/index.ts --env prod",
     "cf-typegen": "wrangler types"
   },
   "devDependencies": {

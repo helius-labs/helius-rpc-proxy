@@ -1,4 +1,4 @@
-import { isValidJWT } from './utils';
+import { ElixirEnvironment, isValidJWT } from './utils';
 
 const MAINNET_RPC_URL = 'mainnet.helius-rpc.com';
 const DEVNET_RPC_URL = 'devnet.helius-rpc.com';
@@ -34,14 +34,31 @@ export default {
       });
     }
 
-    if (!(await isValidJWT(request, env))) {
+    const url = new URL(request.url);
+    let elixirEnv:
+      | (typeof ElixirEnvironment)[keyof typeof ElixirEnvironment]
+      | undefined;
+    if (env.IS_LIVE_PROD) {
+      elixirEnv = ElixirEnvironment.LIVE_PROD;
+    } else {
+      elixirEnv = url.searchParams.get('env') as
+        | (typeof ElixirEnvironment)[keyof typeof ElixirEnvironment]
+        | undefined;
+    }
+
+    if (!elixirEnv || !Object.values(ElixirEnvironment).includes(elixirEnv)) {
+      return new Response('Invalid elixir environment', { status: 400 });
+    }
+
+    if (!(await isValidJWT(request, env, elixirEnv))) {
       return new Response('Valid JWT required', { status: 401 });
     }
 
     const upgradeHeader = request.headers.get('Upgrade');
+    const IS_MAINNET = !url.searchParams.has('devnet');
 
     if (upgradeHeader || upgradeHeader === 'websocket') {
-      const rpcUrl = env.IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
+      const rpcUrl = IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
       return await fetch(
         `https://${rpcUrl}/?api-key=${env.HELIUS_API_KEY}`,
         request,
@@ -50,7 +67,7 @@ export default {
 
     const { pathname, search } = new URL(request.url);
     const payload = await request.text();
-    const rpcUrl = env.IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
+    const rpcUrl = IS_MAINNET ? MAINNET_RPC_URL : DEVNET_RPC_URL;
     const proxyRequest = new Request(
       `https://${
         pathname === '/' ? rpcUrl : 'api.helius.xyz'

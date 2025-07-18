@@ -9,7 +9,25 @@ Both standard JSON RPC and Websockets are supported!
 
 # JWT Validation
 
-`JWT_SECRET` variable is needed for jwt validation of incoming requests.
+Variables needed for jwt validation of incoming requests.
+
+```bash
+# PRODUCTION
+LIVE_PROD_JWT_PUBKEY=""
+TEST_PROD_JWT_PUBKEY=""
+
+# INTEGRATION
+TEST_INT_JWT_PUBKEY=""
+LIVE_INT_JWT_PUBKEY=""
+
+## DEVELOP
+LIVE_DEV_JWT_PUBKEY=""
+TEST_DEV_JWT_PUBKEY=""
+```
+
+### IMPORTANT
+
+When IS_LIVE_PROD is set to true only allowed jwts are from LIVE PROD, this is so we protect the production helius apikey from being missused while testing and QA.
 
 # Additional Security Steps
 
