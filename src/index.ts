@@ -34,11 +34,58 @@ export default {
 			});
 		}
 
-		const upgradeHeader = request.headers.get('Upgrade')
-
-		if (upgradeHeader || upgradeHeader === 'websocket') {
-			return await fetch(`https://mainnet.helius-rpc.com/?api-key=${env.HELIUS_API_KEY}`, request)
-		}
+	const upgrade = request.headers.get('Upgrade')?.toLowerCase();
+	if (upgrade === 'websocket') {
+		const { search } = new URL(request.url);
+		const upstreamUrl = `wss://mainnet.helius-rpc.com${search ? `${search}&` : '?'}api-key=${env.HELIUS_API_KEY}`;
+		
+		// Create WebSocket pair
+		const webSocketPair = new WebSocketPair();
+		const [client, server] = Object.values(webSocketPair);
+		
+		// Accept the client connection
+		server.accept();
+		
+		// Connect to upstream WebSocket
+		const upstream = new WebSocket(upstreamUrl);
+		
+		// Forward messages from client to upstream
+		server.addEventListener('message', event => {
+			if (upstream.readyState === WebSocket.OPEN) {
+				upstream.send(event.data);
+			}
+		});
+		
+		// Forward messages from upstream to client
+		upstream.addEventListener('message', event => {
+			if (server.readyState === WebSocket.OPEN) {
+				server.send(event.data);
+			}
+		});
+		
+		// Handle connection close
+		server.addEventListener('close', () => {
+			upstream.close();
+		});
+		
+		upstream.addEventListener('close', () => {
+			server.close();
+		});
+		
+		// Handle errors
+		server.addEventListener('error', () => {
+			upstream.close();
+		});
+		
+		upstream.addEventListener('error', () => {
+			server.close();
+		});
+		
+		return new Response(null, {
+			status: 101,
+			webSocket: client,
+		});
+	}
 
 
 		const { pathname, search } = new URL(request.url)
