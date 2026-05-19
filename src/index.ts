@@ -8,6 +8,17 @@ const BUFFER_TIMEOUT_MS = 10000;
 const KEEPALIVE_INTERVAL_MS = 20000;
 const MAX_BUFFER_SIZE = 10;
 
+// Allowed path prefixes for the Helius REST API (api.helius.xyz).
+// Paths not in this list are blocked to prevent exposing sensitive
+// endpoints (e.g. webhook CRUD) through the proxy.
+const ALLOWED_API_PATH_PREFIXES = [
+	'/v0/addresses',
+	'/v0/token-metadata',
+	'/v0/tokens',
+	'/v1/mintlist',
+	'/v0/name',
+];
+
 const KEEPALIVE_MESSAGE = JSON.stringify({
 	jsonrpc: "2.0",
 	method: "helius_keepalive"
@@ -176,11 +187,15 @@ async function handleWebSocket(request: Request, env: Env, corsHeaders: Record<s
 		}
 	});
 
-	// Upstream to client forwarding
+	// Upstream to client forwarding — redact the API key from any
+	// message before sending it to the client.
 	upstream.addEventListener('message', event => {
 		if (server.readyState === WebSocket.OPEN) {
 			try {
-				server.send(event.data);
+				const data = typeof event.data === 'string'
+					? event.data.replaceAll(env.HELIUS_API_KEY, '[REDACTED]')
+					: event.data;
+				server.send(data);
 			} catch {
 				cleanup();
 				try { upstream.close(1011, "client_ws_error"); } catch { }
@@ -228,6 +243,17 @@ async function handleWebSocket(request: Request, env: Env, corsHeaders: Record<s
 async function handleRPC(request: Request, env: Env, corsHeaders: Record<string, string>): Promise<Response> {
 	try {
 		const { pathname, search } = new URL(request.url);
+
+		// Block non-RPC paths unless they match the allowlist.
+		// Without this, requests like /v0/webhooks would be forwarded to
+		// api.helius.xyz with the API key, exposing sensitive CRUD endpoints.
+		if (pathname !== '/' && !ALLOWED_API_PATH_PREFIXES.some(prefix => pathname.startsWith(prefix))) {
+			return new Response(JSON.stringify({ error: 'Path not allowed' }), {
+				status: 403,
+				headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+			});
+		}
+
 		const payload = await request.text();
 
 		// Determine target endpoint
@@ -245,9 +271,15 @@ async function handleRPC(request: Request, env: Env, corsHeaders: Record<string,
 
 		const response = await fetch(proxyRequest);
 
-		return new Response(response.body, {
+		// Read the response body and redact the API key before returning
+		// to the client. This prevents accidental key leakage if the
+		// upstream error response echoes back the request URL.
+		const body = await response.text();
+		const sanitized = body.replaceAll(env.HELIUS_API_KEY, '[REDACTED]');
+
+		return new Response(sanitized, {
 			status: response.status,
-			headers: corsHeaders
+			headers: { ...corsHeaders, 'Content-Type': 'application/json' },
 		});
 
 	} catch {
