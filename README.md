@@ -27,9 +27,9 @@ Add a new variable with the key name `HELIUS_API_KEY` and your Helius API key as
 
 ![Add Secret](docs/add_secret.png)
 
-> NOTE: We recommend selecting "Encrypt". This will hide your key from the UI and API responses, and redact them from logs.
+> NOTE: We recommend selecting "Secret". This will hide your key from the UI and API responses, and redact them from logs.
 
-![Encrypt](docs/encrypt.png)
+![Secret](docs/secret.png)
 
 ### Step 4
 Refresh the page and confirm that your key is now saved and encrypted:
