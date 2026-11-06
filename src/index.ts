@@ -242,7 +242,6 @@ async function handleWebSocket(request: Request, env: Env, corsHeaders: Record<s
 async function handleRPC(request: Request, env: Env, corsHeaders: Record<string, string>): Promise<Response> {
 	try {
 		const { pathname, search } = new URL(request.url);
-		const payload = await request.text();
 
 		// Determine target endpoint
 		const targetHost = pathname === '/' ? 'mainnet.helius-rpc.com' : 'api.helius.xyz';
@@ -250,7 +249,8 @@ async function handleRPC(request: Request, env: Env, corsHeaders: Record<string,
 
 		const proxyRequest = new Request(targetUrl, {
 			method: request.method,
-			body: payload || null,
+			// Forward the stream directly so large uploads are not buffered in memory.
+			body: request.body,
 			headers: {
 				'Content-Type': 'application/json',
 				'X-Helius-Cloudflare-Proxy': 'true',
